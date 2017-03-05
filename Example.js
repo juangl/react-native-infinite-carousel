@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 
 import InfiniteCarousel from './InfiniteCarousel';
