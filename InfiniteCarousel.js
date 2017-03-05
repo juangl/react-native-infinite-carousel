@@ -73,7 +73,7 @@ class InfiniteCarousel extends Component {
 
   _scrollTo = (pos, animated, callback = noop) => {
     const endOfContent = (this.state.contentDimensions.width - this.state.containerDimensions.width) * -1;
-    const direction = pos > this._xScrollPosition; // true to left, false to right
+
     if (pos > 0) {
       this._xScrollPosition = 0;
     } else if (pos < endOfContent) {
