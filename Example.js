@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import InfiniteCarousel from './InfiniteCarousel';
+
 const animals = [
   {
     name: 'Leon',

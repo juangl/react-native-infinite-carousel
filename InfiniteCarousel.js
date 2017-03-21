@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -80,7 +80,6 @@ class InfiniteCarousel extends Component {
     const endOfContent = (this.state.contentDimensions.width -
       this.state.containerDimensions.width) *
       -1;
-    const direction = pos > this._xScrollPosition; // true to left, false to right
     if (pos > 0) {
       this._xScrollPosition = 0;
     } else if (pos < endOfContent) {
