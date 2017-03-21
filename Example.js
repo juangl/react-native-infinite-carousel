@@ -1,5 +1,11 @@
-import React, { Component} from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { Component } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  TouchableOpacity,
+} from 'react-native';
 
 import InfiniteCarousel from './InfiniteCarousel';
 const animals = [
@@ -23,37 +29,38 @@ const animals = [
 
 const HEIGHT = 300;
 
-class Animal extends Component {
-  render() {
-    const { name, color, animatedScale } = this.props;
-    const dynamicStyle = {
-      transform: [{ scale: animatedScale }],
-    };
-    return (
-        <View style={[{ backgroundColor: color }, styles.animal]}>
-          <Animated.View 
-            style={[dynamicStyle, this.props.style, styles.animalBox]}>
-            <Text style={{ color, fontWeight: 'bold' }}>{name}</Text>
-          </Animated.View>
-        </View>
-    );
-  }
-}
+const Animal = ({ name, color, animatedScale, index, style }) => (
+  <View style={[{ backgroundColor: color }, styles.animal]}>
+    <TouchableOpacity onPress={() => console.log(`Selected index is ${index}`)}>
+      <Animated.View
+        style={[
+          {
+            transform: [{ scale: animatedScale }],
+          },
+          style,
+          styles.animalAnimatedBox,
+        ]}>
+        <Text style={{ color, fontWeight: 'bold' }}>{name}</Text>
+      </Animated.View>
+    </TouchableOpacity>
+  </View>
+);
 
 class Example extends Component {
   state = {
     dimensions: {},
-  }
+  };
 
-  _isSameMeasure = (measurement1, measurement2) => 
-    measurement1.width === measurement2.width && measurement1.height === measurement2.height;
+  _isSameMeasure = (measurement1, measurement2) =>
+    measurement1.width === measurement2.width &&
+    measurement1.height === measurement2.height;
 
   _onLayout = ({ nativeEvent }) => {
     const dimensions = nativeEvent.layout;
     if (!this._isSameMeasure(this.state.dimensions, dimensions)) {
       this.setState({ dimensions });
     }
-  }
+  };
 
   render() {
     const dynamicContainerStyle = {
@@ -65,25 +72,32 @@ class Example extends Component {
     const MIN_SCALE = 0.7;
     const MAX_SCALE = 1;
     // we will pass an array of functions as children
-    const pages = animals.map((animal) => (animatedPosition, pageWidth, pageOffset) => {
-      const height = pageWidth * 0.8;
-      const width = height * RECTANGLE_RATIO;
-      return (
-        <Animal
-        {...animal}
-        style={{ width, height }}
-        animatedScale={animatedPosition.interpolate({
-          inputRange: [pageOffset - pageWidth, pageOffset, pageOffset + pageWidth],
-          outputRange: [MIN_SCALE, MAX_SCALE, MIN_SCALE],
-        })} />
-      );
-    });
+    const pages = animals.map((animal, index) =>
+      (animatedPosition, pageWidth, pageOffset) => {
+        const height = pageWidth * 0.8;
+        const width = height * RECTANGLE_RATIO;
+        return (
+          <Animal
+            {...animal}
+            index={index}
+            style={{ width, height }}
+            animatedScale={animatedPosition.interpolate({
+              inputRange: [
+                pageOffset - pageWidth,
+                pageOffset,
+                pageOffset + pageWidth,
+              ],
+              outputRange: [MIN_SCALE, MAX_SCALE, MIN_SCALE],
+            })}
+          />
+        );
+      });
 
     return (
       <View style={styles.container} onLayout={this._onLayout}>
         <View style={dynamicContainerStyle}>
           <InfiniteCarousel>
-            {pages} 
+            {pages}
           </InfiniteCarousel>
         </View>
       </View>
@@ -103,11 +117,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  animalBox: {
-    alignItems: 'center',
+  animalAnimatedBox: {
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#ffffff',
   },
-})
+});
 
 export default Example;
